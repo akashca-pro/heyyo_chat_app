@@ -1,0 +1,27 @@
+import http from 'http'
+import express from 'express'
+import 'dotenv/config'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import connectDB from './config/db.js'
+import { errorHandler,notFound } from './middleware/errorHandler.js'
+
+connectDB();
+
+const app = express()
+
+app.use(cors({
+    credentials : true,
+    origin : process.env.CLIENT_URL
+}))
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({extended : true}));
+
+app.use(notFound)
+app.use(errorHandler)
+
+app.listen(process.env.PORT || 3000, ()=>{
+    console.log(`Server started on http://localhost:${process.env.PORT}`)
+})
