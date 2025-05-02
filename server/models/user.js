@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     status : { type : String, default : 'Heyyo wassup !' },
     isOnline : { type : Boolean,  default : false },
     lastSeen : { type : Date },
+    isActive : { type : Boolean, default : true }
 
 },{ timestamps : true })
 

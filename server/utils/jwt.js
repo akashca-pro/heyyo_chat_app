@@ -3,25 +3,26 @@ import 'dotenv/config'
 import { HTTP_STATUS, STRING_CONSTANTS } from './constants.js'
 import ResponseHandler from './responseModel.js'
 
+const tokenName = process.env.TOKEN_NAME
+
 export const generateToken = (userId) => {
     return jwt.sign({id : userId},process.env.JWT_SECRET,{
         expiresIn : '1d'
     })
 }
 
-export const sendToken = async(res,name,value,age)=>{
-    res.cookie(name,value,{
+export const sendToken = (res,token)=>{
+    res.cookie(tokenName,token,{
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "Strict",
-        maxAge: age
+        maxAge: 1 * 24 * 60 * 60 * 1000
    })
 }
 
 export const verifyToken = async (req,res,next) => {
     
     try {
-        const tokenName = STRING_CONSTANTS.TOKEN_NAME;
         const token = req.cookies[tokenName];
         if (!token) {
             return ResponseHandler.error(res, STRING_CONSTANTS.UNAUTHORIZED, HTTP_STATUS.UNAUTHORIZED)
@@ -47,8 +48,8 @@ export const verifyToken = async (req,res,next) => {
 
 }
 
-export const clearToken = async (res) => {
-    res.cookie(STRING_CONSTANTS.TOKEN_NAME, "", { 
+export const clearToken = (res) => {
+    res.cookie(tokenName, "", { 
         httpOnly: true, 
         secure: process.env.NODE_ENV === "production", 
         sameSite: "Strict", 
