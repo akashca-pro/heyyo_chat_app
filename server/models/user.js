@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 const userSchema = new mongoose.Schema({
 
     _id : { type : String, default : ()=>nanoid(12) },
-    userName : { type : String, required : true, unique : true },
+    username : { type : String, required : true, unique : true },
     email : { type : String, required : true, unique : true},
     profileImage : { type : String },
     password : { type : String, required : true },

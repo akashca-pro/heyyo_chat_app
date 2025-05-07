@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {Toaster} from 'sonner'
 import {Routes , Route} from 'react-router-dom'
 import ScrollToTop from '@/components/ScrollToTop'
@@ -6,8 +6,14 @@ import SignupPage from '@/pages/SignupPage'
 import LoginPage from '@/pages/LoginPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ChatHomePage from './components/Home/ChatHomePage'
+import { requestPersistentStorage } from './crypto/storage'
 
 const App = () => {
+
+  useEffect(()=>{
+    requestPersistentStorage()
+  },[])
+
   return (
       <>  
         <ScrollToTop/>

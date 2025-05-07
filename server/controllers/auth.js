@@ -3,44 +3,16 @@ import User from "../models/user.js";
 import { HTTP_STATUS, STRING_CONSTANTS } from "../utils/constants.js";
 import { clearToken, generateToken, sendToken } from "../utils/jwt.js";
 import { sendOtp } from "../utils/otp.js";
+import bcrypt from 'bcryptjs'
 import ResponseHandler from "../utils/responseModel.js";
-
-// Send otp for login 
-
-export const otp = async(req,res) =>{
-    
-    try {
-        const {userName, email } = req.body;
-
-        const emailExist = await User.findOne({ email })
-
-        if(emailExist)
-            return ResponseHandler.error(res, STRING_CONSTANTS.USER_ALREADY_EXIST,HTTP_STATUS.CONFLICT)
-
-        await sendOtp(email, 'signIn', userName);
-
-        return ResponseHandler.success(res, STRING_CONSTANTS.OTP_SENT, HTTP_STATUS.OK)
-
-    } catch (error) {
-        console.log(STRING_CONSTANTS.OTP_SENT_ERROR, error)
-        return ResponseHandler.error(res, STRING_CONSTANTS.OTP_SENT_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR)
-    }
-
-}
 
 // register user
 
-export const verifyAndRegister = async (req,res) => {
+export const register = async (req,res) => {
     
     try {
         
-        const { userName, email, password, otp, publicKey } = req.body;
-
-        const otpRecord = await OTP.findOne({ email , otp, otpType : 'signIn' })
-        
-        if(!otpRecord) return ResponseHandler.error(res, STRING_CONSTANTS.OTP_ERROR, HTTP_STATUS.BAD_REQUEST)
-        
-        await OTP.findByIdAndDelete(otpRecord._id)
+        const { username, email, password, publicKey } = req.body;
 
         const alreadyExist = await User.findOne({ email })
 
@@ -50,7 +22,7 @@ export const verifyAndRegister = async (req,res) => {
         const hashedPassword = await bcrypt.hash(password,10);
 
         await User.create({
-            userName,
+            username,
             email,
             password : hashedPassword,
             publicKey
@@ -63,7 +35,7 @@ export const verifyAndRegister = async (req,res) => {
 
         sendToken(res,token);
 
-        return ResponseHandler.success(res, STRING_CONSTANTS.REGISTRATION_SUCCESS,HTTP_STATUS.OK,user)
+        return ResponseHandler.success(res, STRING_CONSTANTS.REGISTRATION_SUCCESS,HTTP_STATUS.OK)
 
     } catch (error) {
         console.log(STRING_CONSTANTS.REGISTRATION_ERROR, error);
@@ -117,7 +89,7 @@ export const forgotPassword = async (req,res) => {
         if(!user.isActive)
             return ResponseHandler.error(res,STRING_CONSTANTS.ACCOUNT_IS_DEACTIVATED,HTTP_STATUS.FORBIDDEN)
 
-        await sendOtp(email, 'resetPassword', user.userName);
+        await sendOtp(email, 'resetPassword', user.username);
 
         return ResponseHandler.success(res, STRING_CONSTANTS.RESET_OTP, HTTP_STATUS.OK)
         

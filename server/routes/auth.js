@@ -1,15 +1,12 @@
 // Auth routes
 import express from "express";
-import { forgotPassword, login, logout, otp, verifyAndRegister, verifyOtpForPassword, verifyResetLink } from "../controllers/auth";
+import { forgotPassword, login, logout, register, verifyOtpForPassword }
+ from "../controllers/auth.js";
 const router = express.Router();
-
-// send otp to Email
-
-router.patch('/register/send-otp',otp)
 
 // verify and register otp
 
-router.post('/register/verify-otp',verifyAndRegister)
+router.post('/register',register)
 
 // login user
 

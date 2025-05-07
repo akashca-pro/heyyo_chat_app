@@ -11,9 +11,14 @@ import AuthLayout from "@/components/Auth/AuthLayout"
 import AuthInput from "@/components/Auth/AuthInput"
 import PrimaryButton from "@/components/Auth/PrimaryButton"
 import { signupSchema } from "../lib/validation"
+import { useRegisterMutation } from '@/services/authSlice.js'
+import { toast } from "sonner"
+import { downloadPrivateKeyFile, generatePGPkeys } from "@/crypto/keyManager"
+import { storePrivateKey } from "@/crypto/storage"
 
 const SignupPage = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [register] = useRegisterMutation() 
   const navigate = useNavigate()
 
   const form = useForm({
@@ -23,21 +28,39 @@ const SignupPage = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      terms: false,
     },
   })
 
   const onSubmit = async (data) => {
     setIsLoading(true)
+    const toastId = toast.loading('Please wait. . . ')
     try {
-      // Simulate API call
-      console.log("Signup data:", data)
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      navigate("/login")
+      
+      const { publicKey, privateKey } = await generatePGPkeys(data.username,data.email,data.password); 
+    
+      await storePrivateKey(privateKey)
+
+      const credentials = {
+        username : data.username,
+        email : data.email,
+        password : data.password,
+        publicKey : publicKey
+      }
+
+      await register(credentials).unwrap();
+      downloadPrivateKeyFile(privateKey,` heyyo-${data.username}-private-key.asc`)
+      toast.success('Signup success',{
+        description : `${data?.email} is registered `,
+        id : toastId,
+      })
     } catch (error) {
       console.error("Signup error:", error)
+      toast.error('Error',{
+        description : `${error?.data?.message}`,
+        id : toastId
+      })
       form.setError("root", {
-        message: "There was a problem creating your account. Please try again.",
+        message: `${error?.data?.message}` || "There was a problem creating your account. Please try again.",
       })
     } finally {
       setIsLoading(false)
@@ -92,27 +115,6 @@ const SignupPage = () => {
                 placeholder="••••••••"
                 type="password"
                 icon={Lock}
-              />
-
-              <FormField
-                control={form.control}
-                name="terms"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-4 border">
-                    <FormControl>
-                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="text-sm font-medium leading-none">
-                        I accept the Terms and Conditions
-                      </FormLabel>
-                      <p className="text-xs text-gray-500">
-                        By creating an account, you agree to our Terms of Service and Privacy Policy.
-                      </p>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
               />
 
               {form.formState.errors.root && (
