@@ -6,13 +6,16 @@ import { useNavigate } from "react-router-dom"
 
 import { useLogoutMutation } from '@/services/authSlice.js'
 import { toast } from "sonner"
+import { useAuth } from "@/context/AuthContextApi"
 
 const Navbar = () => {
+  const { logout : removeData } = useAuth() 
   const navigate = useNavigate()
   const [logout] = useLogoutMutation()
   const handleLogout = async() => {
       try {
         await logout().unwrap()
+        removeData();
         toast.success('Logout success')
         navigate('/login')
       } catch (error) {

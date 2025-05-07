@@ -9,13 +9,18 @@ import { Mail, User, Lock } from "lucide-react"
 import AuthLayout from "@/components/Auth/AuthLayout"
 import AuthInput from "@/components/Auth/AuthInput"
 import PrimaryButton from "@/components/Auth/PrimaryButton"
+
+import { useAuth } from "@/context/AuthContextApi"
+
 import { signupSchema } from "../lib/validation"
 import { useRegisterMutation } from '@/services/authSlice.js'
 import { toast } from "sonner"
+
 import { downloadPrivateKeyFile, generatePGPkeys } from "@/crypto/keyManager"
 import { storePrivateKey } from "@/crypto/storage"
 
 const SignupPage = () => {
+  const { login } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [register] = useRegisterMutation() 
   const navigate = useNavigate()
@@ -45,7 +50,8 @@ const SignupPage = () => {
         publicKey : publicKey
       }
 
-      await register(credentials).unwrap();
+      const res = await register(credentials).unwrap();
+      login(res?.data?.userId);
       downloadPrivateKeyFile(privateKey,` heyyo-${data.username}-private-key.asc`)
       toast.success('Signup success',{
         description : `${data?.email} is registered `,

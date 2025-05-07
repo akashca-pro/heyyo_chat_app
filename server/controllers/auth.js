@@ -35,7 +35,7 @@ export const register = async (req,res) => {
 
         sendToken(res,token);
 
-        return ResponseHandler.success(res, STRING_CONSTANTS.REGISTRATION_SUCCESS,HTTP_STATUS.OK)
+        return ResponseHandler.success(res, STRING_CONSTANTS.REGISTRATION_SUCCESS,HTTP_STATUS.OK,{userId : user._id})
 
     } catch (error) {
         console.log(STRING_CONSTANTS.REGISTRATION_ERROR, error);
@@ -68,7 +68,7 @@ export const login = async (req,res) => {
 
         sendToken(res,token);
 
-        return ResponseHandler.success(res, STRING_CONSTANTS.LOGIN_SUCCESS, HTTP_STATUS.OK,)
+        return ResponseHandler.success(res, STRING_CONSTANTS.LOGIN_SUCCESS, HTTP_STATUS.OK,{userId : user._id})
 
     } catch (error) {
         console.log(STRING_CONSTANTS.LOGIN_ERROR, error);
@@ -145,7 +145,6 @@ export const logout = async (req,res) => {
     try {
 
         const userId = req.user.id;
-        console.log(req)
 
         await User.findByIdAndUpdate(userId,{ $set : { isOnline : false } })
 

@@ -9,12 +9,16 @@ import { Mail, Lock } from "lucide-react"
 import AuthLayout from "@/components/Auth/AuthLayout"
 import AuthInput from "@/components/Auth/AuthInput"
 import PrimaryButton from "@/components/Auth/PrimaryButton"
+
+import { useAuth } from "@/context/AuthContextApi"
+
 import { loginSchema } from "../lib/validation"
 
 import { useLoginMutation } from '@/services/authSlice.js'
 import { toast } from "sonner"
 
 const LoginPage = () => {
+  const { login : loginData} = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [login] = useLoginMutation()
   const navigate = useNavigate()
@@ -35,7 +39,8 @@ const LoginPage = () => {
         email : data.email,
         password : data.password
       }
-      await login(credentials).unwrap()
+      const res = await login(credentials).unwrap()
+      loginData(res?.data?.userId);
       toast.success('Login success',{id : toastId})
       navigate('/')
     } catch (error) {
