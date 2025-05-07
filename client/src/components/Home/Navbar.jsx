@@ -4,13 +4,20 @@ import { MessageCircle, LogOut, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "react-router-dom"
 
+import { useLogoutMutation } from '@/services/authSlice.js'
+import { toast } from "sonner"
+
 const Navbar = () => {
   const navigate = useNavigate()
+  const [logout] = useLogoutMutation()
   const handleLogout = async() => {
       try {
-        
+        await logout().unwrap()
+        toast.success('Logout success')
+        navigate('/login')
       } catch (error) {
-        
+        console.log('Logout error',error)
+        toast.error('Logout Failed')
       }
   }
 

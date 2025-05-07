@@ -26,6 +26,6 @@ router.patch('/forgot-password/verify-otp',verifyOtpForPassword)
 
 // logout user
 
-router.delete('/logout',logout)
+router.delete('/logout',verifyToken,logout)
 
 export default router

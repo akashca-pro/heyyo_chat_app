@@ -145,11 +145,12 @@ export const logout = async (req,res) => {
     try {
 
         const userId = req.user.id;
+        console.log(req)
 
         await User.findByIdAndUpdate(userId,{ $set : { isOnline : false } })
 
         clearToken(res)
-
+ 
         return ResponseHandler.success(res, STRING_CONSTANTS.LOGOUT_SUCCESS, HTTP_STATUS.OK)
 
     } catch (error) {
