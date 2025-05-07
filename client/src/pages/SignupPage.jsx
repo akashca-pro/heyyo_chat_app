@@ -1,8 +1,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Form } from "@/components/ui/form"
 import { Link, useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Mail, User, Lock } from "lucide-react"
@@ -20,7 +19,6 @@ const SignupPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [register] = useRegisterMutation() 
   const navigate = useNavigate()
-
   const form = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -53,15 +51,22 @@ const SignupPage = () => {
         description : `${data?.email} is registered `,
         id : toastId,
       })
+      navigate('/');
     } catch (error) {
       console.error("Signup error:", error)
-      toast.error('Error',{
-        description : `${error?.data?.message}`,
-        id : toastId
-      })
-      form.setError("root", {
-        message: `${error?.data?.message}` || "There was a problem creating your account. Please try again.",
-      })
+      if(error?.data?.error){
+        error?.data?.error?.forEach(err=>toast.error(err?.msg,{duration : 4000}))
+      }else{
+        
+        toast.error('Sign up Failed',{
+          description : `${error?.data?.message}`,
+          id : toastId
+        })
+
+        form.setError("root", {
+          message: `${error?.data?.message}` || "There was a problem creating your account. Please try again.",
+        })
+      }
     } finally {
       setIsLoading(false)
     }
@@ -77,7 +82,7 @@ const SignupPage = () => {
   )
 
   return (
-    <AuthLayout title="Create an account" description="Sign up to start messaging with your friends" footer={footer}>
+    <AuthLayout title="Create an account" description="Chat freely and securely with end-to-end encryption" footer={footer}>
       <AnimatePresence mode="wait">
         <motion.div
           key="signup-form"

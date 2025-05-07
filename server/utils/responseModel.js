@@ -13,7 +13,7 @@ class ResponseHandler {
         return res.status(statusCode).json({
             success : false,
             message,
-            error : error?.message  
+            error : error 
         })
     }
 

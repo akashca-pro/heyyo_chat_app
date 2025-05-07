@@ -11,8 +11,12 @@ import AuthInput from "@/components/Auth/AuthInput"
 import PrimaryButton from "@/components/Auth/PrimaryButton"
 import { loginSchema } from "../lib/validation"
 
+import { useLoginMutation } from '@/services/authSlice.js'
+import { toast } from "sonner"
+
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [login] = useLoginMutation()
   const navigate = useNavigate()
 
   const form = useForm({
@@ -25,16 +29,30 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true)
+    const toastId = toast.loading('Please wait...')
     try {
-      // Simulate API call
-      console.log("Login data:", data)
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      navigate("/dashboard")
+      const credentials = {
+        email : data.email,
+        password : data.password
+      }
+      await login(credentials).unwrap()
+      toast.success('Login success',{id : toastId})
+      navigate('/')
     } catch (error) {
       console.error("Login error:", error)
-      form.setError("root", {
-        message: "Invalid email or password. Please try again.",
-      })
+      if(error?.data?.error){
+        error?.data?.error?.forEach(err=>toast.error(err?.msg,{duration : 4000,id : toastId}))
+      }else{
+        
+        toast.error('Login Failed',{
+          description : `${error?.data?.message}`,
+          id : toastId
+        })
+
+        form.setError("root", {
+          message: `${error?.data?.message}` ||  "Invalid email or password. Please try again.",
+        })
+      }
     } finally {
       setIsLoading(false)
     }

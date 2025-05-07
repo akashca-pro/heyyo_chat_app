@@ -2,7 +2,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { motion } from "framer-motion"
 import { MessageCircle } from "lucide-react"
 
-const AuthLayout = ({ children, title, description, footer }) => {
+const AuthLayout = ({ children, title = "Welcome to Heyyo" , 
+  description, 
+  footer }) => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
       <motion.div
@@ -14,9 +16,10 @@ const AuthLayout = ({ children, title, description, footer }) => {
         <Card className="shadow-lg border-gray-200">
           <CardHeader className="space-y-1 flex flex-col items-center">
             <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mb-2">
-              <MessageCircle className="h-6 w-6 text-primary-foreground" />
+            <img src="/heyyo_logo.svg" alt="Chat Icon" className="h-6 w-6" />
             </div>
-            <CardTitle className="text-2xl font-bold text-center">{title}</CardTitle>
+            <CardTitle className="text-2xl font-bold">Welcome to Heyyo</CardTitle>
+            <p className="text-base font-medium text-muted-foreground">{title}</p>
             <CardDescription className="text-center">{description}</CardDescription>
           </CardHeader>
           <CardContent>{children}</CardContent>

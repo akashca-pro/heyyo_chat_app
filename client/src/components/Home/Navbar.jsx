@@ -2,8 +2,18 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { MessageCircle, LogOut, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useNavigate } from "react-router-dom"
 
 const Navbar = () => {
+  const navigate = useNavigate()
+  const handleLogout = async() => {
+      try {
+        
+      } catch (error) {
+        
+      }
+  }
+
   return (
     <header className="bg-white border-b border-gray-200 py-3 px-4 flex items-center justify-between">
       <div className="flex items-center">
@@ -26,7 +36,7 @@ const Navbar = () => {
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-destructive">
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Logout</span>
             </DropdownMenuItem>

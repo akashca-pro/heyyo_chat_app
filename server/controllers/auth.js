@@ -62,6 +62,8 @@ export const login = async (req,res) => {
         if(!user.isActive)
             return ResponseHandler.error(res,STRING_CONSTANTS.ACCOUNT_IS_DEACTIVATED,HTTP_STATUS.FORBIDDEN)
         
+        await User.findByIdAndUpdate(user._id,{ $set : { isOnline : true } })
+
         const token = generateToken(user._id);
 
         sendToken(res,token);
@@ -141,6 +143,10 @@ export const verifyOtpForPassword = async (req,res) => {
 export const logout = async (req,res) => {
 
     try {
+
+        const userId = req.user.id;
+
+        await User.findByIdAndUpdate(userId,{ $set : { isOnline : false } })
 
         clearToken(res)
 
