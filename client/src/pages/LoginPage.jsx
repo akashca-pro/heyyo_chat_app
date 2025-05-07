@@ -64,15 +64,23 @@ const LoginPage = () => {
   }
 
   const footer = (
-    <p className="text-sm text-gray-600">
-      Don't have an account?{" "}
-      <Link to="/signup" className="text-primary font-medium hover:underline">
-        Sign up
-      </Link>
-    </p>
+<div className="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-600">
+  <p>Don't have an account?</p>
+  <Link to="/signup" className="text-primary font-medium hover:underline">
+    Sign up
+  </Link>
+</div>
   )
 
   return (
+    <motion.div 
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.3 }}
+    className="flex h-screen w-screen items-center justify-center">
+    <div className="grid h-full w-full md:grid-cols-2  m-18 ">
+
     <AuthLayout title="Welcome back" description="Log in to your account to continue" footer={footer}>
       <AnimatePresence mode="wait">
         <motion.div
@@ -152,6 +160,11 @@ const LoginPage = () => {
         </motion.div>
       </AnimatePresence>
     </AuthLayout>
+    <div className="hidden md:flex flex-col items-center justify-center text-white p-8">
+          <img src="/login.png" alt="Signup Illustration" className="w-full max-w-[600px]" />
+        </div>
+    </div>
+    </motion.div>
   )
 }
 
