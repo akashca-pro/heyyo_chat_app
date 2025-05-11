@@ -16,8 +16,10 @@ import { signupSchema } from "../lib/validation"
 import { useRegisterMutation } from '@/services/authSlice.js'
 import { toast } from "sonner"
 
-import { downloadPrivateKeyFile, generatePGPkeys } from "@/crypto/keyManager"
-import { storePrivateKey } from "@/crypto/storage"
+
+import { decryptPrivateKey, generatePGPkeys } from "@/crypto/key_manager/pgp_key_manage"
+import { encryptWithSessionKey, generateSessionKey } from "@/crypto/key_manager/sesson_key_manage"
+import { storeCipherData, storePrivateKey } from "@/crypto/storage"
 
 const SignupPage = () => {
   const { login } = useAuth()
@@ -40,8 +42,10 @@ const SignupPage = () => {
     try {
       
       const { publicKey, privateKey } = await generatePGPkeys(data.username,data.email,data.password); 
-    
-      await storePrivateKey(privateKey)
+
+      const decryptedPrivateKey = await decryptPrivateKey(privateKey,data.password)
+
+      storePrivateKey(decryptedPrivateKey);
 
       const credentials = {
         username : data.username,
@@ -52,7 +56,7 @@ const SignupPage = () => {
 
       const res = await register(credentials).unwrap();
       login(res?.data?.userId);
-      downloadPrivateKeyFile(privateKey,` heyyo-${data.username}-private-key.asc`)
+      downloadPrivateKeyFile(privateKey,`heyyo-${data.username}-private-key.asc`)
       toast.success('Signup success',{
         description : `${data?.email} is registered `,
         id : toastId,

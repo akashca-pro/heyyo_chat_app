@@ -29,8 +29,3 @@ export const downloadPrivateKeyFile = (encryptedPrivateKey, filename = 'private-
     URL.revokeObjectURL(url);
 }
 
-export const importAndDecryptPrivateKey = async (file, password) => {
-    const text = await file.text();
-    const privateKey = await openpgp.readPrivateKey({ armoredKey: text });
-    return await openpgp.decryptKey({ privateKey, passphrase: password });
-}
