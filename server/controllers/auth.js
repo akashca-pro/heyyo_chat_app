@@ -12,7 +12,7 @@ export const register = async (req,res) => {
     
     try {
         
-        const { username, email, password, publicKey } = req.body;
+        const { username, email, password, keyBundle } = req.body;
 
         const alreadyExist = await User.findOne({ email })
 
@@ -25,7 +25,7 @@ export const register = async (req,res) => {
             username,
             email,
             password : hashedPassword,
-            publicKey
+            keyBundle
         })
 
         const user = await User.findOne({ email })

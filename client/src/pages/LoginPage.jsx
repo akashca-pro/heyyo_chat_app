@@ -16,8 +16,6 @@ import { loginSchema } from "../lib/validation"
 
 import { useLoginMutation } from '@/services/authSlice.js'
 import { toast } from "sonner"
-import { decryptPrivateKey } from "@/crypto/key_manager/pgp_key_manage"
-import { storePrivateKey } from "@/crypto/storage"
 
 const LoginPage = () => {
   const { login : loginData} = useAuth()
@@ -34,20 +32,10 @@ const LoginPage = () => {
     },
   })
 
-const importPrivateKey = async (file) => {
-    const text = await file.text();
-    setPrivateKey(text);
-}
-
   const onSubmit = async (data) => {
     setIsLoading(true)
     const toastId = toast.loading('Please wait...')
     try {
-
-      const decryptedPrivateKey = await decryptPrivateKey(privateKey,data.password)
-
-      storePrivateKey(decryptedPrivateKey);
-
       const credentials = {
         email : data.email,
         password : data.password

@@ -11,15 +11,12 @@ import AuthInput from "@/components/Auth/AuthInput"
 import PrimaryButton from "@/components/Auth/PrimaryButton"
 
 import { useAuth } from "@/context/AuthContextApi"
+import { generateKeyBundle } from "@/crypto/signal_keys"
 
 import { signupSchema } from "../lib/validation"
 import { useRegisterMutation } from '@/services/authSlice.js'
 import { toast } from "sonner"
 
-
-import { decryptPrivateKey, generatePGPkeys } from "@/crypto/key_manager/pgp_key_manage"
-import { encryptWithSessionKey, generateSessionKey } from "@/crypto/key_manager/sesson_key_manage"
-import { storeCipherData, storePrivateKey } from "@/crypto/storage"
 
 const SignupPage = () => {
   const { login } = useAuth()
@@ -40,23 +37,18 @@ const SignupPage = () => {
     setIsLoading(true)
     const toastId = toast.loading('Please wait. . . ')
     try {
-      
-      const { publicKey, privateKey } = await generatePGPkeys(data.username,data.email,data.password); 
 
-      const decryptedPrivateKey = await decryptPrivateKey(privateKey,data.password)
-
-      storePrivateKey(decryptedPrivateKey);
+      const keyBundle = await generateKeyBundle();
 
       const credentials = {
         username : data.username,
         email : data.email,
         password : data.password,
-        publicKey : publicKey
+        keyBundle
       }
 
       const res = await register(credentials).unwrap();
       login(res?.data?.userId);
-      downloadPrivateKeyFile(privateKey,`heyyo-${data.username}-private-key.asc`)
       toast.success('Signup success',{
         description : `${data?.email} is registered `,
         id : toastId,
@@ -65,7 +57,7 @@ const SignupPage = () => {
     } catch (error) {
       console.error("Signup error:", error)
       if(error?.data?.error){
-        error?.data?.error?.forEach(err=>toast.error(err?.msg,{duration : 4000}))
+        error?.data?.error?.forEach(err=>toast.error(err?.msg,{duration : 4000,id : toastId}))
       }else{
         
         toast.error('Sign up Failed',{

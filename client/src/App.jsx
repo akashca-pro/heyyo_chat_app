@@ -6,15 +6,11 @@ import SignupPage from '@/pages/SignupPage'
 import LoginPage from '@/pages/LoginPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ChatHomePage from './components/Home/ChatHomePage'
-import { requestPersistentStorage } from './crypto/storage'
 import AuthProtector from './protector/AuthProtector'
 import HomeProtector from './protector/HomeProtector'
 
 const App = () => {
 
-  useEffect(()=>{
-    requestPersistentStorage()
-  },[])
 
   return (
       <>  

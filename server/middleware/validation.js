@@ -13,7 +13,7 @@ export const registerValidationRules = [
     .matches(/^[A-Za-z][A-Za-z0-9\s]*$/)
     .withMessage('Username should not start with a number or contain special characters'),
 
-    body('publicKey').notEmpty().withMessage('Public key is required')
+    body('keyBundle').notEmpty().withMessage('Public key is required')
 ]
 
 export const loginValidationRules = [
