@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { MessageCircle, LogOut, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useNavigate } from "react-router-dom"
 
 import { useLogoutMutation } from '@/services/authSlice.js'
 import { toast } from "sonner"
@@ -10,14 +9,12 @@ import { useAuth } from "@/context/AuthContextApi"
 
 const Navbar = () => {
   const { logout : removeData } = useAuth() 
-  const navigate = useNavigate()
   const [logout] = useLogoutMutation()
   const handleLogout = async() => {
       try {
         await logout().unwrap()
         removeData();
         toast.success('Logout success')
-        navigate('/login')
       } catch (error) {
         console.log('Logout error',error)
         toast.error('Logout Failed')
@@ -27,8 +24,10 @@ const Navbar = () => {
   return (
     <header className="bg-white border-b border-gray-200 py-3 px-4 flex items-center justify-between">
       <div className="flex items-center">
-        <MessageCircle className="h-6 w-6 text-primary mr-2" />
-        <h1 className="text-xl font-bold text-gray-800">ChatApp</h1>
+      <div className="h-9 w-9 text-primary mr-2">
+            <img src="/heyyo_logo.svg" alt="Chat Icon" />
+            </div>
+        <h1 className="text-xl font-bold text-gray-800">Heyyo</h1>
       </div>
 
       <div className="flex items-center space-x-2">

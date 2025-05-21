@@ -9,12 +9,12 @@ import { AuthProvider } from './context/AuthContextApi'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+        <BrowserRouter>
     <AuthProvider>
       <Provider store={store} >
-        <BrowserRouter>
           <App />
-        </BrowserRouter>
       </Provider>
     </AuthProvider>
+        </BrowserRouter>
   </StrictMode>,
 )

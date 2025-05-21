@@ -3,9 +3,9 @@ import { motion } from "framer-motion"
 
 const AuthLayout = ({ children, title = "Welcome to Heyyo" , 
   description, 
-  footer }) => {
+  footer, fullScreen }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 ">
+    <div className='min-h-screen flex items-center justify-center p-4'>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

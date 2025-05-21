@@ -92,7 +92,7 @@ const SignupPage = () => {
     exit={{ opacity: 0 }}
     transition={{ duration: 0.3 }}
     className="flex h-screen w-screen items-center justify-center">
-      <div className="grid h-full w-full md:grid-cols-2 m-18 ">
+      <div className="grid h-full w-full md:grid-cols-2 md:m-18 ">
         <div className="hidden md:flex flex-col items-center justify-center text-white p-8">
           <img src="/signup.png" alt="Signup Illustration" className="w-full max-w-[600px]" />
         </div>

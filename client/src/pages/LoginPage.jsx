@@ -80,9 +80,10 @@ const LoginPage = () => {
     exit={{ opacity: 0 }}
     transition={{ duration: 0.3 }}
     className="flex h-screen w-screen items-center justify-center">
-    <div className="grid h-full w-full md:grid-cols-2  m-18 ">
+    <div className="grid h-full w-full md:grid-cols-2  md:m-18 ">
 
-    <AuthLayout title="Welcome back" description="Log in to your account to continue" footer={footer}>
+    <AuthLayout title="Welcome back" description="Log in to your account to continue" 
+    footer={footer} fullscreen = {false} >
       <AnimatePresence mode="wait">
         <motion.div
           key="login-form"
