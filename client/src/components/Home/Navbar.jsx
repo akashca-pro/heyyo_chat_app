@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { MessageCircle, LogOut, User } from "lucide-react"
+import { LogOut, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 import { useLogoutMutation } from '@/services/authSlice.js'
 import { toast } from "sonner"
 import { useAuth } from "@/context/AuthContextApi"
+import { useNavigate } from "react-router-dom"
 
 const Navbar = () => {
+  const navigate = useNavigate()
   const { logout : removeData } = useAuth() 
   const [logout] = useLogoutMutation()
   const handleLogout = async() => {
@@ -19,6 +21,10 @@ const Navbar = () => {
         console.log('Logout error',error)
         toast.error('Logout Failed')
       }
+  }
+
+  const handleProfile = () =>{
+      navigate('/profile')
   }
 
   return (
@@ -35,13 +41,13 @@ const Navbar = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+                <AvatarImage src="/male.jpg" alt="User" />
                 <AvatarFallback>JD</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem onClick={handleProfile} className="cursor-pointer">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>

@@ -17,14 +17,6 @@ export const AuthProvider = ({children})=>{
       localStorage.setItem('user', JSON.stringify(userData));
     };
 
-       // Monitor JWT Token in cookies
-    useEffect(() => {
-        const token = Cookies.get("userToken");
-
-        if (!token) {
-            logout(); // Auto logout if token is missing
-        }
-    }, []);
   
     const logout = () => {
       setUser(null);

@@ -7,6 +7,7 @@ import connectDB from './config/db.js'
 import { errorHandler,notFound } from './middleware/errorHandler.js'
 
 import authRoute from './routes/auth.js'
+import profileRoute from './routes/profile.js'
 
 connectDB();
 
@@ -23,6 +24,7 @@ app.use(express.urlencoded({extended : true}));
 
 // Auth routes
 app.use('/api/auth',authRoute)
+app.use('/api/profile',profileRoute)
 
 app.use(notFound)
 app.use(errorHandler)

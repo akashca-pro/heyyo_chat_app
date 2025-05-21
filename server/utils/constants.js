@@ -30,6 +30,12 @@ export const STRING_CONSTANTS = Object.freeze({
     ACCOUNT_IS_DEACTIVATED : 'Account is deactivated',
     PASSWORD_RESET_SUCCESS : 'Password reset successfull',
     PASSWORD_RESET_ERROR : 'Password reset failed',
+    PROFILE_UPDATION_ERROR : 'Profile updation error',
+    ACCOUNT_DELETION_SUCCESS : 'Account deletion success',
+    ACCOUNT_DELETION_FAILED : 'Account deletion failed',
+    PROFILE_UPDATION_SUCCESS : 'Profile updation success',
+    PROFILE_LOAD_ERROR : 'Error loading profile',
+    PROFILE_LOAD_SUCCESS : 'Profile Load Success',
 })
 
 export const HTTP_STATUS = Object.freeze({

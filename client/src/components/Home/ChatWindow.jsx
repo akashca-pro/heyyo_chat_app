@@ -2,12 +2,12 @@ import { useRef, useEffect } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Info, MessageSquarePlus } from "lucide-react"
+import { ArrowLeft, Info, MessageSquarePlus } from "lucide-react"
 import MessageBubble from "./MessageBubble"
 import ChatInput from "./ChatInput"
 import { motion } from "framer-motion"
 
-const ChatWindow = ({ selectedChat, messages, onSendMessage }) => {
+const ChatWindow = ({ selectedChat, messages, onSendMessage, onBack }) => {
   const messagesEndRef = useRef(null)
 
   useEffect(() => {
@@ -38,9 +38,18 @@ const ChatWindow = ({ selectedChat, messages, onSendMessage }) => {
 
   return (
     <div className="flex flex-col h-full relative">
+
       {/* Chat header */}
       <div className="p-3 border-b flex items-center justify-between bg-white">
         <div className="flex items-center">
+                  {onBack && (
+          <button
+            onClick={onBack}
+            className="mr-4 text-blue-500 hover:text-blue-700"
+          >
+            <ArrowLeft/>
+          </button>
+        )}
           <Avatar className="h-10 w-10 mr-3">
             <AvatarImage src={selectedChat.avatar || "/placeholder.svg"} alt={selectedChat.name} />
             <AvatarFallback>{selectedChat.name.charAt(0)}</AvatarFallback>

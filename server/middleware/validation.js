@@ -24,11 +24,39 @@ export const loginValidationRules = [
 
 ]
 
-export const validateForm = async(req,res,next) =>{
+
+export const profileValidationRules = [
+  body('username')
+    .isLength({ min: 3 })
+    .matches(/^[A-Za-z][A-Za-z0-9\s]*$/)
+    .withMessage('Username should not start with a number or contain special characters'),
+
+  body('profileImage')
+    .optional()
+    .isString()
+    .withMessage('Profile image must be a string (URL or file path)'),
+
+  body('age')
+    .isInt({ min: 0 })
+    .withMessage('Age must be a valid non-negative number'),
+
+  body('gender')
+    .isIn(['male', 'female', 'other'])
+    .withMessage('Gender must be one of: male, female, or other'),
+
+  body('status')
+    .optional()
+    .isString()
+]
+
+export const validateForm = (errorMessage) => async(req,res,next) =>{
 
     const errors = validationResult(req)
     if(!errors.isEmpty()){
-        return ResponseHandler.error(res,STRING_CONSTANTS.REGISTRATION_ERROR,HTTP_STATUS.BAD_REQUEST,errors.array())
+        return ResponseHandler.error(res,
+            errorMessage,
+            HTTP_STATUS.BAD_REQUEST,
+            errors.array())
     }
     next()
 }

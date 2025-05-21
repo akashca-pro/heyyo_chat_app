@@ -8,6 +8,14 @@ import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ChatHomePage from './components/Home/ChatHomePage'
 import AuthProtector from './protector/AuthProtector'
 import HomeProtector from './protector/HomeProtector'
+import ProfilePage from './components/profile/ProfilePage'
+
+ const initialUser = {
+    name: "Alex Johnson",
+    status: "Working on something cool 🚀",
+    avatar: "/male.jpg",
+  }
+
 
 const App = () => {
 
@@ -37,6 +45,13 @@ const App = () => {
           <ChatHomePage />
           </HomeProtector>
           } />
+
+          <Route path='/profile' element={
+            <HomeProtector>
+              <ProfilePage initialUser={initialUser} />
+            </HomeProtector>
+          } />
+
       </Routes>
       </> 
  )

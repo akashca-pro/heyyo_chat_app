@@ -40,7 +40,6 @@ const ChatHomePage = () => {
   
     const handleBack = () => {
     setSelectedChat(null);
-    setMessages(null);
   };
 
 
@@ -58,7 +57,7 @@ const ChatHomePage = () => {
           {selectedChat ? (
             <ChatWindow
               selectedChat={selectedChat}
-            messages={messages.filter(
+            messages={messages?.filter(
               (msg) => selectedChat && (msg.senderId === selectedChat.id || msg.senderId === "current-user"),
             )}
               onSendMessage={handleSendMessage}
